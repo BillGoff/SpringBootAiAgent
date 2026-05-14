@@ -90,7 +90,6 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.4.1</version> <!-- Use latest version -->
 				<configuration>
 					<filesets>
 						<fileset>
