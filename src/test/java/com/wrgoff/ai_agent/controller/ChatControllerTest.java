@@ -43,7 +43,6 @@ class ChatControllerTest {
 		String expectedResponse = "Hello Bill";
 		try {
 			String actualResponse = mockMvc.perform(get("/hello/Bill")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-			System.out.println(actualResponse);
 			
 			if(expectedResponse.equalsIgnoreCase(actualResponse))
 				System.out.println("Got expected Response: " + expectedResponse);
