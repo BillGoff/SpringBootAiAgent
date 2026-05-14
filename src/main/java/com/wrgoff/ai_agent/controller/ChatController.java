@@ -8,6 +8,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wrgoff.utils.DateUtils;
@@ -91,20 +93,18 @@ public class ChatController {
 	}
 	
 	/**
-	 * This get end point is used to send a request to Google Gen Ai Chat to tell us 5 famous pirates. 
-	 * @return String the response back from Google Gen AI.
+	 * This Post end point is used to send a request to the Open AI Client.
+	 * @return String the response returned from Open AI Chat Client.
 	 */
-	@GetMapping("/googleAiChat")
-	public String googleAiChat()
+	@PostMapping("/askOpenAI")
+	public String askOpenAi(@RequestBody String question)
 	{	
 		Date startDate = DateUtils.rightNowDate();
 		boolean failed = false;
 		
 		try
 		{
-			String response = googleGenAiClient.prompt("Generate the names of 5 famous pirates.").call().content();
-			
-			System.out.println(response);
+			String response = openAiClient.prompt(question).call().content();
 			return response;
 		}
 		catch(Exception e)
@@ -123,6 +123,78 @@ public class ChatController {
 				msg.append(" to successfully ");
 		
 			msg.append("get a response back from Open AI Chat.");
+			
+			logger.info(msg.toString());
+		}	
+	}
+	
+	/**
+	 * This get end point is used to send a request to Google Gen Ai Chat to tell us 5 famous pirates. 
+	 * @return String the response back from Google Gen AI.
+	 */
+	@GetMapping("/googleAiChat")
+	public String googleAiChat()
+	{	
+		Date startDate = DateUtils.rightNowDate();
+		boolean failed = false;
+		
+		try
+		{
+			String response = googleGenAiClient.prompt("Generate the names of 5 famous pirates.").call().content();
+			return response;
+		}
+		catch(Exception e)
+		{
+			failed = true;
+			e.printStackTrace();
+			return(e.getMessage());
+		}
+		finally
+		{
+			StringBuilder msg = new StringBuilder("It took " + DateUtils.computeDiff(startDate,
+					DateUtils.rightNowDate()));
+			if (failed)
+				msg.append(" to fail to ");
+			else
+				msg.append(" to successfully ");
+		
+			msg.append("get a response back from Google AI.");
+			
+			logger.info(msg.toString());
+		}	
+	}
+	
+	/**
+	 * This Post end point is used to send a request to the Google AI Client.
+	 * @return String the response returned from Google AI Chat Client.
+	 */
+	@PostMapping("/askGoogleAi")
+	public String askGoogleAi(@RequestBody String question)
+	{	
+		Date startDate = DateUtils.rightNowDate();
+		boolean failed = false;
+		
+		try
+		{
+			String response = googleGenAiClient.prompt(question).call().content();
+			return response;
+		}
+		catch(Exception e)
+		{
+			failed = true;
+			e.printStackTrace();
+			return(e.getMessage());
+		}
+		finally
+		{
+			StringBuilder msg = new StringBuilder("It took " + DateUtils.computeDiff(startDate,
+					DateUtils.rightNowDate()));
+			if (failed)
+				msg.append(" to fail to ");
+			else
+				msg.append(" to successfully ");
+		
+			msg.append("get a response back from Google AI.");
 			
 			logger.info(msg.toString());
 		}	
